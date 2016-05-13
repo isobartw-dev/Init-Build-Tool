@@ -1,0 +1,3 @@
+[
+    { "keys": ["alt+shift+i"], "command": "init_build_tool"}
+]
