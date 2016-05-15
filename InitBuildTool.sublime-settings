@@ -1,4 +1,4 @@
 {
-	"workflow_package_path":"D:/Data/project/github/campaign-build-tools/",
+	"workflow_package_path":"D:/git-demo/campaign-build-tools/",
 	"use_files":["task","package.json"]
 }

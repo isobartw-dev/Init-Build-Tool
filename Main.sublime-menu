@@ -15,7 +15,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Init Build Tool/InitBuildTool.sublime-settings"
+                                    "file": "${packages}/Init-Build-Tool/InitBuildTool.sublime-settings"
                                 },
                                 "caption": "Settings – Default"
                             },
@@ -23,7 +23,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Init Build Tool/Default (Windows).sublime-keymap",
+                                    "file": "${packages}/Init-Build-Tool/Default (Windows).sublime-keymap",
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – Default"

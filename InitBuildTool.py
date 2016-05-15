@@ -14,13 +14,16 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 		else:
 			folder = "請先建立project"
 
-		def on_done(index, ):
+		def on_done(index):
 			if index == -1: return
 			select = folder[index]
 			# print(select)
 			copy_files(select)
 			 
 		self.window.show_quick_panel(folder, on_done)
+
+		# def build():
+		# 	print('build')
 
 		def copy_files(dest_folder):
 			for file in workflow_files:
@@ -31,5 +34,8 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 					shutil.copytree(src_path, dest_path)
 				else:
 					shutil.copy(src_path, dest_path)
+			# return build()
+
+		
 				
 				
