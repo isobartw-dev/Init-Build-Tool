@@ -1,37 +1,37 @@
 [
-    {
-        "id": "preferences",
-        "children":
-        [
-            {
-                "caption": "Package Settings",
-                "id": "package-settings",
-                "children":
-                [
-                    {
-                        "caption": "Init Build Tool",
-                        "children":
-                        [
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/Init-Build-Tool/InitBuildTool.sublime-settings"
-                                },
-                                "caption": "Settings – Default"
-                            },
-                            { "caption": "-" },
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/Init-Build-Tool/Default (Windows).sublime-keymap",
-                                    "platform": "Windows"
-                                },
-                                "caption": "Key Bindings – Default"
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
+	{
+		"id": "preferences",
+		"children":
+		[
+			{
+				"caption": "Package Settings",
+				"id": "package-settings",
+				"children":
+				[
+					{
+						"caption": "init-build-tool",
+						"children":
+						[
+							{
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/init-build-tool/InitBuildTool.sublime-settings"
+								},
+								"caption": "Settings – Default"
+							},
+							{ "caption": "-" },
+							{
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/init-build-tool/Default (Windows).sublime-keymap",
+									"platform": "Windows"
+								},
+								"caption": "Key Bindings – Default"
+							}
+						]
+					}
+				]
+			}
+		]
+	}
 ]

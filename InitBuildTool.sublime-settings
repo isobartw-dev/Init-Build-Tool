@@ -1,4 +1,5 @@
 {
-	"workflow_package_path":"D:/git-demo/campaign-build-tools/",
-	"use_files":["task","package.json"]
+	"workflowPackagePath":"",
+	"useFiles":["task","package.json"],
+	"buildSystem":"build-system.txt"
 }
