@@ -7,7 +7,7 @@ init-build-tool
 - build system
 
 ## 安裝
-Ctrl+ Shift + p > Add Repository > https://github.com/isobartw-dev/Init-Build-Tool
+Ctrl+ Shift + p > Add Repository > https://github.com/isobartw-dev/init-build-tool
 
 ## 設定
 Preferences > Package Setting > init-build-tool >Settings – Default  
