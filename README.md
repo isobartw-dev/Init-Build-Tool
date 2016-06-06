@@ -16,5 +16,5 @@ Preferences > Package Setting > InitBuildTool > Settings – User
 "workflowPackagePath":"D:/XXX/XXX..."
 ```
 ## 使用
-- ``Ctrl+ Shift + p`` > 建立自動化流程：campign
+- ``Ctrl+ Shift + p`` > 建立自動化流程：Campign
 - ``Alt + Shift + i``
