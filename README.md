@@ -11,7 +11,7 @@ sublime text 自動化流程開發環境，將自動化任務及功能加入開�
 3. clone [CampaignBuildTool](https://github.com/isobartw-dev/CampaignBuildTool) 專案到電腦
 
 ## 設定
-Preferences > Package Setting > InitBuildTool > Settings – User
+Preferences > Package Setting > InitBuildTool > Settings – User  
 設定 CampaignBuildTool 的路徑
 ```
 {
