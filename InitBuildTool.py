@@ -22,7 +22,7 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 			for file in workflowFiles:
 				result = os.path.exists(os.path.abspath(os.path.join(select, file)))
 				exist.append(result)
-			with open (self.window.project_file_name(), 'r+') as project:
+			with open (self.window.project_file_name(), 'r+', encoding='utf8') as project:
 					projectData = project.readlines()
 					exist.append('\t"build_systems":\n' in projectData)
 			if True in exist:
@@ -60,7 +60,7 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 				return
 			print('成功複製檔案，偵測是否有 build system')
 			file = os.path.abspath(os.path.join(workflowPath, buildSystem))
-			with open (self.window.project_file_name(), 'r+') as project:
+			with open (self.window.project_file_name(), 'r+', encoding='utf8') as project:
 				projectData = project.readlines()
 				if (overwrite == 'system' or 'all') and '\t"build_systems":\n' in projectData:
 					newProjectData = ['{\n']
