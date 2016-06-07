@@ -3,13 +3,12 @@ import os
 import shutil
 import time
 
-setting = sublime.load_settings("InitBuildTool.sublime-settings")
-workflowPath = setting.get('workflowPackagePath')
-workflowFiles = setting.get('useFiles')
-buildSysem = setting.get('buildSystem')
-
 class InitBuildToolCommand(sublime_plugin.WindowCommand):
 	def run(self):
+		self.setting = sublime.load_settings("InitBuildTool.sublime-settings")
+		workflowPath = self.setting.get('workflowPackagePath')
+		workflowFiles = self.setting.get('useFiles')
+		buildSysem = self.setting.get('buildSystem')
 		# print(folder)
 		if self.window.folders():
 			folder = self.window.folders()
