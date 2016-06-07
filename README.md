@@ -19,8 +19,10 @@ Preferences > Package Setting > InitBuildTool > Settings – User
 }
 ```
 ## 使用
+指令
 - ``Ctrl+ Shift + p`` > 建立自動化流程：Campaign
 - ``Alt + Shift + i``
+成功複製檔案後 .sublime-project 會開啟，存檔後關閉即可
 
 ## 更新
 當 CampaignBuildTool 更新時，執行 InitBuildTool 即可更新為最新版本

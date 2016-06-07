@@ -6,9 +6,7 @@ import time
 class InitBuildToolCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		self.setting = sublime.load_settings("InitBuildTool.sublime-settings")
-		workflowPath = self.setting.get('workflowPackagePath')
 		workflowFiles = self.setting.get('useFiles')
-		buildSysem = self.setting.get('buildSystem')
 		# print(folder)
 		if self.window.folders():
 			folder = self.window.folders()
@@ -27,42 +25,51 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 			with open (self.window.project_file_name(), 'r+') as project:
 					projectData = project.readlines()
 					exist.append('\t"build_systems":\n' in projectData)
-			while exist.count(True) == len(exist):
-				if sublime.yes_no_cancel_dialog('build tool 已建立\n是否要更新為最新版本', '全部更新', '指定更新') == sublime.DIALOG_NO:
-					if sublime.yes_no_cancel_dialog('請選擇要更新的項目', '更新 task 及 package.json', '更新 build system') == sublime.DIALOG_YES:
-						overwrite = 'file'
-					elif sublime.DIALOG_NO:
+			if True in exist:
+				while exist.count(True) == len(exist):
+					if sublime.yes_no_cancel_dialog('build tool 已建立\n是否要更新為最新版本', '全部更新', '指定更新') == sublime.DIALOG_NO:
+						if sublime.yes_no_cancel_dialog('請選擇要更新的項目', '更新 task 及 package.json', '更新 build system') == sublime.DIALOG_YES:
+							overwrite = 'file'
+						elif sublime.DIALOG_NO:
+							overwrite = 'system'
+						elif sublime.DIALOG_CANCEL:
+							return None
+					elif sublime.DIALOG_YES:
+						overwrite = 'all'
+					elif sublime.DIALOG_CANCEL:
+						 return None
+					break
+				while overwrite == 'none' and exist.index(True) < len(exist) - 1:
+					if not sublime.ok_cancel_dialog('task 和 package 已建立\n是否需要更新為最新版本', '更新'):
 						overwrite = 'system'
-				elif sublime.DIALOG_YES:
-					overwrite = 'all'
-				break
-			while overwrite == 'none' and exist.index(True) < len(exist) - 1:
-				if not sublime.ok_cancel_dialog('task 和 package 已建立\n是否需要更新為最新版本', '更新'):
-					overwrite = 'system'
-				break
-			while overwrite == 'none' and exist.index(True) == len(exist) - 1:
-				if not sublime.ok_cancel_dialog('build system 已建立\n是否需要更新為最新版本', '更新'):
-					overwrite = 'file'
-				break
+					break
+				while overwrite == 'none' and exist.index(True) == len(exist) - 1:
+					if not sublime.ok_cancel_dialog('build system 已建立\n是否需要更新為最新版本', '更新'):
+						overwrite = 'file'
+					break	
 			
 			copyFiles(select, copied, overwrite)
 		self.window.show_quick_panel(folder, on_done)
 
 		def copied(overwrite):
+			workflowPath = self.setting.get('workflowPackagePath')
+			buildSystem = self.setting.get('buildSystem')
 			if overwrite == 'file':
-				print('成功複製檔案') 
+				print('成功複製檔案')
+				sublime.status_message('成功複製檔案')
 				return
 			print('成功複製檔案，偵測是否有 build system')
 			file = os.path.abspath(os.path.join(workflowPath, buildSystem))
 			with open (self.window.project_file_name(), 'r+') as project:
 				projectData = project.readlines()
-				if overwrite == 'system' or 'all':
+				if (overwrite == 'system' or 'all') and '\t"build_systems":\n' in projectData:
 					newProjectData = ['{\n']
 					breakLine = projectData.index('\t],\n') + 1
 					dataLine = len(projectData)
 					for line in range(breakLine, dataLine):
 						newProjectData.append(projectData[line])
 					projectData = newProjectData
+					# print(projectData)
 				with open (file, 'r') as txt:
 					# print(projectData)
 					txtData = txt.readlines()
@@ -74,6 +81,8 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 						project.seek(0, 0)
 						project.truncate(0)
 						project.writelines(projectData)
+						self.window.open_file(self.window.project_file_name())
+						sublime.status_message('成功建立檔環境')
 
 		def getSize(path):
 			folderSize = 0
@@ -91,6 +100,8 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 			return size
 
 		def copyFiles(destFolder, copied, overwrite):
+			workflowPath = self.setting.get('workflowPackagePath')
+			workflowFiles = self.setting.get('useFiles')
 			if overwrite == "system":
 				copied(overwrite)
 				return
