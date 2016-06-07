@@ -80,9 +80,9 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 						# print(projectData)
 						project.seek(0, 0)
 						project.truncate(0)
-						project.writelines(projectData)
+						project.writelines(projectData)						
 						self.window.open_file(self.window.project_file_name())
-						sublime.status_message('成功建立檔環境')
+						sublime.status_message('成功建立環境')
 
 		def getSize(path):
 			folderSize = 0
