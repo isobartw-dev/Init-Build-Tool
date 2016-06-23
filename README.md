@@ -1,6 +1,7 @@
 InitBuildTool sublime text package
 =======================================
-sublime text 自動化流程開發環境，將自動化任務及功能加入開發專案 [自動化流程 step by step](https://hackmd.io/s/S1ohqCzN)
+初次使用請先看[自動化流程 step by step](https://hackmd.io/s/S1ohqCzN)  
+sublime text 自動化流程開發環境，將自動化任務及功能加入開發專案
 - task (自動化任務檔案)
 - package.json (自動化需要使用的 package 及 npm script)
 - build system (sublime project build system)
