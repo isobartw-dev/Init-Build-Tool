@@ -7,10 +7,11 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		self.setting = sublime.load_settings("InitBuildTool.sublime-settings")
 		workflowFiles = self.setting.get('useFiles')
-		folder = [];
+		folders = [];
 		if self.window.folders():
+			folder = self.window.folders();
 			for path in self.window.folders():
-				folder.append(path.split('\\')[-1])
+				folders.append(path.split('\\')[-1])
 		else:
 			sublime.message_dialog("請先建立project")
 		# print(folder)
@@ -51,7 +52,7 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 					break	
 			
 			copyFiles(select, copied, overwrite)
-		self.window.show_quick_panel(folder, on_done)
+		self.window.show_quick_panel(folders, on_done)
 
 		def copied(overwrite):
 			workflowPath = self.setting.get('workflowPackagePath')
