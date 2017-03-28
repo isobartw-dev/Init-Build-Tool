@@ -7,11 +7,13 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		self.setting = sublime.load_settings("InitBuildTool.sublime-settings")
 		workflowFiles = self.setting.get('useFiles')
-		# print(folder)
+		folder = [];
 		if self.window.folders():
-			folder = self.window.folders()
+			for path in self.window.folders():
+				folder.append(path.split('\\')[-1])
 		else:
 			sublime.message_dialog("請先建立project")
+		# print(folder)
 
 		def on_done(index):
 			if index == -1: return
