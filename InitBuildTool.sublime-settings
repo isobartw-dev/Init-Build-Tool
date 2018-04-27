@@ -1,5 +1,6 @@
 {
 	"workflowPackagePath":"",
-	"useFiles":["task","package.json"],
-	"buildSystem":"build-system.txt"
+	"useFiles":["task","package.json", "font"],
+	"buildSystem":"build-system.txt",
+	"packageData": ["dependencies", "scripts"]
 }
