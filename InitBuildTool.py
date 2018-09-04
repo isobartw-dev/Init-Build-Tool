@@ -14,7 +14,7 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 				folders.append(path.split('\\')[-1])
 		else:
 			sublime.message_dialog("請先建立project並且加入folder")
-		# print(folder)
+		
 
 		def on_done(index):
 			if index == -1: return
@@ -35,8 +35,12 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 			
 			if True in exist:
 				while exist.count(True) == len(exist):
-					if sublime.yes_no_cancel_dialog('build tool 已建立\n是否要更新為最新版本', '全部更新', '指定更新') == sublime.DIALOG_NO:
-						if sublime.yes_no_cancel_dialog('請選擇要更新的項目', '更新 task 及 package.json', '更新 build system') == sublime.DIALOG_YES:
+					if sublime.yes_no_cancel_dialog(
+						'build tool 已建立\n是否要更新為最新版本', '全部更新', '指定更新'
+						) == sublime.DIALOG_NO:
+						if sublime.yes_no_cancel_dialog(
+							'請選擇要更新的項目', '更新 task 及 package.json', '更新 build system'
+							) == sublime.DIALOG_YES:
 							overwrite = 'file'
 						elif sublime.DIALOG_NO:
 							overwrite = 'system'
@@ -48,17 +52,17 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 						 return None
 					break
 				while overwrite == 'none' and exist.index(True) < len(exist) - 1:
-					print("bb");
 					if not sublime.ok_cancel_dialog('task 和 package 已建立\n是否需要更新為最新版本', '更新'):
-						print("aa");
 						overwrite = 'system'
+					else:
+						overwrite = 'file'
 					break
 				while overwrite == 'none' and exist.index(True) == len(exist) - 1:
 					if not sublime.ok_cancel_dialog('build system 已建立\n是否需要更新為最新版本', '更新'):
 						overwrite = 'file'
 					break	
 
-			print('overwrite '+ overwrite)
+			# print('overwrite '+ overwrite)
 			copyFiles(select, copied, overwrite)
 		self.window.show_quick_panel(folders, on_done)
 
@@ -91,7 +95,8 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 					project.seek(0, 0)
 					project.truncate(0)
 					project.writelines(projectData)				
-					self.window.open_file(self.window.project_file_name())
+					# self.window.open_file(self.window.project_file_name())
+					project.close()
 					sublime.message_dialog('成功建立環境')
 
 		def getSize(path):
@@ -132,16 +137,17 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 							itPackageData = itPackage.readlines()
 							itPackageLine = len(itPackageData)
 							itPackageBreakLine = {}
-							
-							if "Isobar" in itPackage:
+
+							if not '\t"name": "CampaignBuildTool",\n' in itPackageData:
 								for i, val in enumerate(itPackageData):
-									rangeLine = []
 									if (val.endswith(': {\n') or val.endswith(':{\n')) and val.split('"')[1] in packageItems:
 										if val.count(packageItems[0]):
 											itPackageBreakLine[val.split('"')[1]] = i
 										else:
 											itPackageBreakLine[val.split('"')[1]] = i+1
-								itPackageBreakLine['none'] = itPackageBreakLine[list(itPackageBreakLine)[0]] - 2;
+									elif val.endswith(',\n') and len(val.split('"')) > 1 and val.split('"')[1] in packageItems:
+										itPackageBreakLine[val.split('"')[1]] = i+1
+								itPackageBreakLine['none'] = itPackageBreakLine['scripts'] - 2;
 
 								with open (srcPath, 'r') as f2ePackage:
 									f2ePackageData = f2ePackage.readlines()
@@ -161,7 +167,15 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 											rangeLine.append(i)
 											dataDict['range'] = rangeLine
 											f2ePackageBreakLine.append(dataDict)
-
+										elif val.endswith(',\n') and len(val.split('"')) > 1 and val.split('"')[1] in packageItems:
+											rangeLine = []
+											dataDict = {}
+											dataDict['title'] = val.split('"')[1]
+											rangeLine.append(i)
+											rangeLine.append(i+1)
+											dataDict['range'] = rangeLine
+											f2ePackageBreakLine.append(dataDict)
+												
 									for i, val in enumerate(f2ePackageBreakLine):
 										value = []
 										for line in range(val['range'][0], val['range'][1]):
@@ -171,35 +185,53 @@ class InitBuildToolCommand(sublime_plugin.WindowCommand):
 											# else:
 										insertData[val['title']] = value
 								# print(insertData)
-								# print(itPackageBreakLine)	
+								# print(itPackageBreakLine)
 								lineDefault = 0;		
 								for val in packageItems:
 									for txt in list(itPackageBreakLine):
 										if val == txt:
-											insertData[val][-1] = insertData[val][-1][:-1] + ',\n'
-											line = itPackageBreakLine[val]
+											if txt == 'name':
+												insertData[val][-1] = insertData[val][-1][:-1] + '\n'
+												line = itPackageBreakLine[val] - 1;
+											else:
+												insertData[val][-1] = insertData[val][-1][:-1] + ',\n'
+												line = itPackageBreakLine[val]
+											# print(val, txt, insertData[val][-1], line)
 											if line > lineDefault:
 												line = line + lineDefault
 											lineDefault = lineDefault + len(insertData[val]);
 											# print(itPackageBreakLine, val, line, lineDefault);
 											for insertLine in range(0, len(insertData[val])):
-												itPackageData.insert(line, insertData[val][insertLine])
-												line = line+1
-										elif val != txt and insertData[val][0].count('{') > 0:
-											if  insertData[val][-1].count('}') == 0:
-												insertData[val].append('\t},\n')
-												line = itPackageBreakLine['none'] + lineDefault + 1
-												lineDefault = lineDefault + len(insertData[val]);
-												for insertLine in range(0, len(insertData[val])):
-													itPackageData.insert(line, insertData[val][insertLine])
+												if txt == 'name':
+													itPackageData[line] = insertData[val][insertLine]
+												else:
+													if insertData[val][insertLine].count('watch:all') > 0:
+														itPackageData.insert(line, insertData[val][insertLine].replace('",', ' \\"gulp watch:js\\"",'))
+													else:
+														itPackageData.insert(line, insertData[val][insertLine])
 													line = line+1
+										elif val != txt and insertData[val][0].count('{') > 0:
+											if txt == 'none':
+												# print(txt, val, insertData[val])
+												if  insertData[val][-1].count('}') == 0:
+													insertData[val].append('\t},\n')
+													line = itPackageBreakLine['none'] + lineDefault + 1
+													lineDefault = lineDefault + len(insertData[val]);
+													# print(line, lineDefault)
+													for insertLine in range(0, len(insertData[val])):
+														itPackageData.insert(line, insertData[val][insertLine])
+														line = line+1
 								# print(itPackageData)
 								itPackage.seek(0, 0)
 								itPackage.truncate(0)
 								itPackage.writelines(itPackageData)
-								self.window.open_file(destPath)
+								# self.window.open_file(destPath)
+								itPackage.close()
 							else:
-								shutil.copy(srcPath, destPath)
+								if '\t"description": "Brand CampaignName",\n' in itPackageData:
+									sublime.message_dialog('package.json已合併(IT+前端)，請手動更新')
+								else:
+									shutil.copy(srcPath, destPath)
 					else:
 						shutil.copy(srcPath, destPath)
 				destSize = getSize(destPath)
