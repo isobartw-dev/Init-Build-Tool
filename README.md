@@ -7,8 +7,7 @@ sublime text 自動化流程開發環境，將自動化任務及功能加入開�
 - build system (sublime project build system)
 
 ## 更新項目
-**2018.09.4**
-    加入整合 IT package.json 功能，有任何問題請發issue track
+**2018.09.04** 加入整合 IT package.json 功能，有任何問題請發issue track
 
 ## 安裝
 1. Ctrl+ Shift + p > Add Repository > 貼上 https://<i></i>github.com/isobartw-dev/InitBuildTool
